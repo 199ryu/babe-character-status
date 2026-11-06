@@ -117,7 +117,7 @@ export function renderStatus(state:StatusState):string {
   const stage=stageLabel(state);
   const stageBox=typeof state.stage==='number'?{}:{x:170,width:301.5};
   const blocks=[
-    block('name','name','양동호 (20세)'),block('height','height','172 cm'),block('weight','weight','71 kg'),
+    block('name','name','양동호 (20세)'),block('height','height','182 cm'),block('weight','weight','84 kg'),
     block('location','location',location),block('time','time',state.time??UNKNOWN),
     block('stage','corruption',stage,stageBox),
     block('reality','reality',reality),block('arousal','arousal',state.arousal===null?UNKNOWN:`${state.arousal}%`),
