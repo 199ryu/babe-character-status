@@ -13,7 +13,7 @@ const pictures=motion.frames.map((frame,index)=>{
 const content=`<defs>${masks}</defs><style>@media(prefers-reduced-motion:reduce){.motion-frame{visibility:hidden!important}.motion-frame:first-of-type{visibility:visible!important}}</style>${pictures}`;
 
 /** Same portrait box/occlusion as static characters; no external resources. */
-export function renderMotionPortrait(top:number):string {
+export function renderMotionPortrait(top:number,stage:2|3=2):string {
   const crop=motion.crop;
-  return `<svg data-character="pink" data-motion="stage-2" data-matte-version="${motion.matteVersion}" x="14" y="${top}" width="350" height="464" viewBox="${crop.x} ${crop.y} ${crop.width} ${crop.height}" preserveAspectRatio="xMidYMin slice" overflow="hidden">${content}</svg>`;
+  return `<svg data-character="pink" data-motion="stage-${stage}" data-matte-version="${motion.matteVersion}" x="14" y="${top}" width="350" height="464" viewBox="${crop.x} ${crop.y} ${crop.width} ${crop.height}" preserveAspectRatio="xMidYMin slice" overflow="hidden">${content}</svg>`;
 }
