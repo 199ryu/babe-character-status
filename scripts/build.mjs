@@ -7,7 +7,7 @@ import {zipFunctions} from '@netlify/zip-it-and-ship-it';
 
 const root=fileURLToPath(new URL('../',import.meta.url));
 assert.equal(Number(process.versions.node.split('.')[0]),24,'Use Node.js 24 to build this project');
-for(const file of ['netlify.toml','public/index.html','netlify/functions/status.ts','src/status/handle.ts','src/status/parse.ts','src/status/schema.ts','src/status/svg.ts','src/status/artwork.json','src/status/characters.json','src/status/motion.ts','src/status/motion.json','src/status/aura.ts'])await access(join(root,file));
+for(const file of ['netlify.toml','public/index.html','netlify/functions/status.ts','src/status/handle.ts','src/status/parse.ts','src/status/schema.ts','src/status/svg.ts','src/status/artwork.json','src/status/characters.json','src/status/motion.ts','src/status/motion.json','src/status/aura.ts','src/status/aura-video.json'])await access(join(root,file));
 const config=parse(await readFile(join(root,'netlify.toml'),'utf8'));
 assert.equal(config.build.publish,'public');assert.equal(config.build.command,'npm run build');assert.equal(config.functions.directory,'netlify/functions');assert.equal(config.functions.node_bundler,'esbuild');
 const publishEntries=await readdir(join(root,'public'));assert.deepEqual(publishEntries,['index.html'],'Publish only the minimal service notice');
@@ -40,6 +40,8 @@ for(const stage of ['1','4']){
   const response=await compiled.default(new Request(motionUrl));assert.equal(response.status,200);
   const body=await response.text();assert.ok(body.includes(`data-aura-motion="stage-${stage}"`));
   assert.ok(body.includes('id="character-sprite"'));assert.ok(!body.includes('class="motion-frame"'));
+  assert.equal((body.match(/class="aura-video-frame"/g)||[]).length,120);
+  assert.ok(4*Math.ceil(Buffer.byteLength(body)/3)+1024<6_000_000,'Aura response payload is too large');
 }
 const report={function:fn.name,bundler:fn.bundler,runtime:fn.runtimeVersion,runtimeAPIVersion:fn.buildData.runtimeAPIVersion,routes:fn.routes,bundledModuleGet:200,bundledModuleHeadEmpty:true,bundledModulePost:405,svgBytes,motionSvgBytes,motionFrames:72,publishFiles:publishEntries,boundary:'Official local function bundle and imported compiled user module; not Lambda/Netlify deployment.'};
 await writeFile(join(output,'checks.json'),JSON.stringify(report,null,2));console.log(JSON.stringify(report,null,2));
